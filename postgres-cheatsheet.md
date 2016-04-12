@@ -14,7 +14,17 @@ FROM foo_tbl
 
 Convert an interval into a number of hours
 ```sql
-SELECT EXTRACT(epoch FROM my_interval)/3600
+SELECT 
+	EXTRACT(epoch FROM my_interval)/3600
+FROM foo_tbl
+```
+
+Convert seconds (integer) to HH:MM:SS
+```sql
+SELECT 
+	TO_CHAR((time_in_seconds || ‘ second’)::interval, ‘HH24:MI:SS’) AS time_in_hhmmss 
+FROM foo_tbl
+
 ```
 
 
