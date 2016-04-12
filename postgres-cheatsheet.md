@@ -1,3 +1,27 @@
+Postgres cheatsheet
+========================
+## Overview
+  
+  * [SQL](#sql)
+  * [Strings](#strings)
+  * [Date and time](#date-and-time)
+  * [Window functions](#window-functions)
+  * [Admin stuff](#admin-stuff)
+  * [Restore / Dump](#restore-dump)
+
+## SQL
+
+### Reciprocal relationships
+Extract unique pairs from table containing reciprocal relationships
+
+```sql
+SELECT DISTINCT 
+	CASE WHEN Person1 > Person2 THEN Person2 ELSE Person1 END as Person1, 
+	CASE WHEN Person1 > Person2 THEN Person1 ELSE Person2 END as Person2 
+FROM couples 
+WHERE relationshiptype = 'Married'
+```
+
 ## Strings
 
 ```sql
@@ -10,7 +34,7 @@ FROM foo_tbl
 ```
 
 
-## Date time
+## Date and time
 
 Convert an interval into a number of hours
 ```sql
