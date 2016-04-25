@@ -7,7 +7,9 @@ Postgres cheatsheet
   * [Date and time](#date-and-time)
   * [Window functions](#window-functions)
   * [Admin stuff](#admin-stuff)
-  * [Restore / Dump](#restore-dump)
+  * [Restore / dump](#restore-dump)
+  * [Backups](#backups)
+
 
 ## SQL
 
@@ -24,6 +26,7 @@ WHERE relationshiptype = 'Married'
 
 ## Strings
 
+Check if a string starts with a number
 ```sql
 
 SELECT 	
@@ -36,7 +39,7 @@ FROM foo_tbl
 
 ## Date and time
 
-Convert an interval into a number of hours
+Convert an interval into a number of hours (3600 seconds, change to any other value for other time spans)
 ```sql
 SELECT 
 	EXTRACT(epoch FROM my_interval)/3600
@@ -82,8 +85,31 @@ GROUP BY schema_name
 ORDER BY schema_name
 ```
 
+Give a role rights to schema, tables and functions
+
+```sql
+DO $do$
+DECLARE
+    sch text;
+    role_name varchar := 'your_role';
+BEGIN
+    FOR sch IN SELECT nspname FROM pg_namespace
+    LOOP
+        EXECUTE format($$ GRANT USAGE ON SCHEMA %I TO %I $$, sch,role_name);
+        EXECUTE format($$ GRANT SELECT ON ALL TABLES IN SCHEMA %I TO %I $$, sch,role_name);
+        EXECUTE format($$ GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA  %I TO %I $$, sch,role_name);
+    END LOOP;
+END;
+$do$;
+
+```
+
 ## Restore / dump
+
+Restore a plain text file to a database
 
 ```
 psql -U your_user_name your_db_name < your_dump_file
 ```
+
+## Backups
