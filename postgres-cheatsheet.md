@@ -62,6 +62,19 @@ FROM     foo_tbl
 ORDER BY <field>
 ```
 
+## Add a sequence to an existing column
+
+```sql
+-- blocks of commands to turn foo into bar
+CREATE SEQUENCE schema_name.table_seq;
+ALTER TABLE schema_name.table ALTER COLUMN id SET DEFAULT nextval('schema_name.table_seq');
+ALTER TABLE schema_name.table ALTER COLUMN id SET NOT NULL;
+ALTER SEQUENCE schema_name.table OWNED BY schema_name.table.id;    -- 8.2 or later
+
+SELECT MAX(id) FROM schema_name.table;
+SELECT setval('schema_name.table_seq', 5);  -- replace 5 by SELECT MAX result
+```sql
+
 ## Admin stuff
 
 View the size per schema
